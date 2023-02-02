@@ -1,6 +1,26 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const AllUsers = () => {
+    const [users, getUsers] = useState([]);
+
+    const url = 'https://jsonplaceholder.typicode.com/users/';
+
+    useEffect(() => {
+        getAllUsers();
+    }, [])
+
+    const getAllUsers = () => {
+        axios.get(url)
+            .then((response) => {
+                const allUsers = response.data;
+                console.log(allUsers);
+                getUsers(allUsers);
+            })
+            .catch(error => console.error(`Error: ${error}`));
+    }
+
     return (
         <div className="flex flex-col">
             <div className="overflow-x-auto">
@@ -9,120 +29,56 @@ const AllUsers = () => {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
+
                                     <th
                                         scope="col"
                                         className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                     >
-                                        ID
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                    >
-                                        Name
+
                                     </th>
                                     <th
                                         scope="col"
                                         className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                     >
-                                        Email
+                                        Contact
                                     </th>
                                     <th
                                         scope="col"
-                                        className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                     >
-                                        Edit
+                                        City
                                     </th>
                                     <th
                                         scope="col"
-                                        className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                     >
-                                        Delete
+                                        State
                                     </th>
+
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                <tr>
-                                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                        1
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                        Jone Doe
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                        jonne62@gmail.com
-                                    </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <a
-                                            className="text-green-500 hover:text-green-700"
-                                            href=""
-                                        >
-                                            Edit
-                                        </a>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <a
-                                            className="text-red-500 hover:text-red-700"
-                                            href=""
-                                        >
-                                            Delete
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                        2
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                        Jone Doe
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                        jonne62@gmail.com
-                                    </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <a
-                                            className="text-green-500 hover:text-green-700"
-                                            href=""
-                                        >
-                                            Edit
-                                        </a>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <a
-                                            className="text-red-500 hover:text-red-700"
-                                            href=""
-                                        >
-                                            Delete
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                        3
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                        Jone Doe
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                        jonne62@gmail.com
-                                    </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <a
-                                            className="text-green-500 hover:text-green-700"
-                                            href=""
-                                        >
-                                            Edit
-                                        </a>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                        <a
-                                            className="text-red-500 hover:text-red-700"
-                                            href=""
-                                        >
-                                            Delete
-                                        </a>
-                                    </td>
-                                </tr>
+                                {
+                                    users.map((user) => <tr
+                                        key={user.id}>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">{user.company.name} </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">{user.name} </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">{user.address.city} </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">{user.address.street} </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+
+                                            <Link to={`/details/${user.id}`}>
+                                                <button className="px-8 py-3 font-semibold rounded-full text-white hover:text-black bg-red-500">
+                                                    View Details
+                                                </button>
+                                            </Link>
+
+
+                                        </td>
+
+                                    </tr>
+                                    )}
+
                             </tbody>
                         </table>
                     </div>
